@@ -1,0 +1,82 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "MoviesDBStage",
+						"type": "DatasetReference"
+					},
+					"name": "MoviesADLS"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "WritingFile"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ChangeColumns"
+				},
+				{
+					"name": "FilterDate"
+				},
+				{
+					"name": "PrimaryGenre"
+				},
+				{
+					"name": "RankMoviesByRatings"
+				},
+				{
+					"name": "AggRatings"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movie as string,",
+				"          title as string,",
+				"          genres as string,",
+				"          year as string,",
+				"          Rating as string,",
+				"          {Rotton Tomato} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> MoviesADLS",
+				"MoviesADLS select(mapColumn(",
+				"          movie,",
+				"          title,",
+				"          genres,",
+				"          year,",
+				"          {Rotten Tomato} = {Rotton Tomato}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> ChangeColumns",
+				"ChangeColumns filter(toInteger(year) > 1950) ~> FilterDate",
+				"FilterDate derive(PrimaryGenre = iif(locate(\"|\", genres) > 1, left(genres, locate(\"|\", genres) - 1), genres)) ~> PrimaryGenre",
+				"PrimaryGenre window(over(PrimaryGenre,",
+				"          year),",
+				"     desc({Rotten Tomato}, true),",
+				"     RatingsRank = rank()) ~> RankMoviesByRatings",
+				"RankMoviesByRatings aggregate(AvgRating = avg(toInteger({Rotten Tomato})),",
+				"          HighestRated = first(title),",
+				"          LowestRated = last(title),",
+				"          NumberOfMovies = count()) ~> AggRatings",
+				"AggRatings sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> WritingFile"
+			]
+		}
+	}
+}

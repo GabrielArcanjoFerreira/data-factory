@@ -1,0 +1,9 @@
+{
+	"name": "df-teste-artefact",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "83c06a45-48d0-4c62-a3b7-d28ad63ca383",
+		"tenantId": "d222cd3a-57fd-4642-aa5d-810881268fbd"
+	}
+}
