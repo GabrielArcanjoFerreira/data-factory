@@ -1,0 +1,415 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "df-teste-artefact"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://saccteste.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "mce"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Day",
+						"type": "String"
+					},
+					{
+						"name": "Data Stream Source Name",
+						"type": "String"
+					},
+					{
+						"name": "Data Stream Created Date",
+						"type": "String"
+					},
+					{
+						"name": "Data Stream Last Updated Date",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Key",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Name",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Targeting Age",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Targeting Audience",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Targeting Device",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Targeting Gender",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Targeting Interests",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Targeting Language",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Targeting Location",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy End Date",
+						"type": "String"
+					},
+					{
+						"name": "Media Buy Status",
+						"type": "String"
+					},
+					{
+						"name": "Conversion Tag Key",
+						"type": "String"
+					},
+					{
+						"name": "Conversion Tag Name",
+						"type": "String"
+					},
+					{
+						"name": "Conversion Tag Category",
+						"type": "String"
+					},
+					{
+						"name": "Creative Key",
+						"type": "String"
+					},
+					{
+						"name": "Creative Name",
+						"type": "String"
+					},
+					{
+						"name": "Creative Format",
+						"type": "String"
+					},
+					{
+						"name": "Campaign Advertiser ID",
+						"type": "String"
+					},
+					{
+						"name": "Campaign Advertiser",
+						"type": "String"
+					},
+					{
+						"name": "Campaign Key",
+						"type": "String"
+					},
+					{
+						"name": "*Campaign Name (CM)",
+						"type": "String"
+					},
+					{
+						"name": "Campaign Category",
+						"type": "String"
+					},
+					{
+						"name": "Campaign Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Campaign End Date",
+						"type": "String"
+					},
+					{
+						"name": "Campaign Status",
+						"type": "String"
+					},
+					{
+						"name": "Strategy Key",
+						"type": "String"
+					},
+					{
+						"name": "Strategy Name",
+						"type": "String"
+					},
+					{
+						"name": "*Business Unit [CLA_BusinessUnit]",
+						"type": "String"
+					},
+					{
+						"name": "*Brand",
+						"type": "String"
+					},
+					{
+						"name": "*Publisher",
+						"type": "String"
+					},
+					{
+						"name": "*Format",
+						"type": "String"
+					},
+					{
+						"name": "Booked Cost",
+						"type": "String"
+					},
+					{
+						"name": "Frequency",
+						"type": "String"
+					},
+					{
+						"name": "Media Cost",
+						"type": "String"
+					},
+					{
+						"name": "Revenue",
+						"type": "String"
+					},
+					{
+						"name": "Reach",
+						"type": "String"
+					},
+					{
+						"name": "Total Conversions",
+						"type": "String"
+					},
+					{
+						"name": "Photo Views",
+						"type": "String"
+					},
+					{
+						"name": "Clicks",
+						"type": "String"
+					},
+					{
+						"name": "Website Clicks",
+						"type": "String"
+					},
+					{
+						"name": "Post Click Conversions",
+						"type": "String"
+					},
+					{
+						"name": "Post Click Revenue",
+						"type": "String"
+					},
+					{
+						"name": "Impressions",
+						"type": "String"
+					},
+					{
+						"name": "Post Impression Conversions",
+						"type": "String"
+					},
+					{
+						"name": "Post Impression Revenue",
+						"type": "String"
+					},
+					{
+						"name": "Video Views",
+						"type": "String"
+					},
+					{
+						"name": "Video Plays",
+						"type": "String"
+					},
+					{
+						"name": "Video Fully Played",
+						"type": "String"
+					},
+					{
+						"name": "Video Completions 75%",
+						"type": "String"
+					},
+					{
+						"name": "Video Completions 50%",
+						"type": "String"
+					},
+					{
+						"name": "Video Completions 25%",
+						"type": "String"
+					},
+					{
+						"name": "Video Avg. Duration (Seconds)",
+						"type": "String"
+					},
+					{
+						"name": "Delivery Social Post Comments",
+						"type": "String"
+					},
+					{
+						"name": "Delivery Social Post Likes",
+						"type": "String"
+					},
+					{
+						"name": "Delivery Social Post Shares",
+						"type": "String"
+					},
+					{
+						"name": "Social Event Responses",
+						"type": "String"
+					},
+					{
+						"name": "Social Page Likes",
+						"type": "String"
+					},
+					{
+						"name": "Social Post Engagement",
+						"type": "String"
+					},
+					{
+						"name": "CTR",
+						"type": "String"
+					},
+					{
+						"name": "CPM",
+						"type": "String"
+					},
+					{
+						"name": "CPC",
+						"type": "String"
+					},
+					{
+						"name": "CPV",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.csv",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]"
+			]
+		}
+	]
+}
